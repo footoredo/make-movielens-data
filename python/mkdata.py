@@ -3,33 +3,21 @@ import sys
 from datetime import datetime, tzinfo, timedelta
 
 if len(sys.argv) < 6:
-    print('Usage: ./mkdata.py user.data user.feature \
-            item.data item.feature all.feature')
+    print('Usage: ./mkdata.py user.feature user.data \
+            item.feature item.data all.feature')
     exit(-1)
-
-users = {}
-with open(sys.argv[1]) as user_data:
-    for line in user_data:
-        data = line.strip().split('|')
-        users[int(data[0])] = map(int, data[1:])
-
-items = {}
-with open(sys.argv[3]) as item_data:
-    for line in item_data:
-        data = line.strip().split('|')
-        items[int(data[0])] = map(int, data[1:])
 
 features = []
 
 cnt_user_features = 0
-with open(sys.argv[2]) as user_feature:
+with open(sys.argv[1]) as user_feature:
     for feature in user_feature.readline().split(' '):
         name, cnt = tuple(feature.split(':'))
         features.append((name, int(cnt)))
         cnt_user_features += int(cnt)
 
 cnt_item_features = 0
-with open(sys.argv[4]) as item_feature:
+with open(sys.argv[3]) as item_feature:
     for feature in item_feature.readline().split(' '):
         name, cnt = tuple(feature.split(':'))
         features.append((name, int(cnt)))
@@ -40,6 +28,18 @@ features.append(('day', 31))
 features.append(('weekday', 7))
 features.append(('month', 12))
 features.append(('year', 20))
+
+users = {}
+with open(sys.argv[2]) as user_data:
+    for line in user_data:
+        data = line.strip().split('|')
+        users[int(data[0])] = map(int, data[1:])
+
+items = {}
+with open(sys.argv[4]) as item_data:
+    for line in item_data:
+        data = line.strip().split('|')
+        items[int(data[0])] = map(int, data[1:])
 
 fin = sys.stdin
 fout = sys.stdout
